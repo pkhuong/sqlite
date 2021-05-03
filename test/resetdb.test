@@ -31,6 +31,7 @@ ifcapable !vtab||!compound {
 #
 if {[permutation]=="inmemory_journal"
  || [permutation]=="journaltest"
+ || ![wal_is_capable]
 } {
   finish_test
   return

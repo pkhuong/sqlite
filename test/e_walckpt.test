@@ -16,6 +16,11 @@ source $testdir/lock_common.tcl
 source $testdir/wal_common.tcl
 set testprefix e_walckpt
 
+if {![wal_is_capable]} {
+  finish_test
+  return
+}
+
 # The following two commands are used to determine if any of the files
 # "test.db", "test.db2" and "test.db3" are modified by a test case.
 #

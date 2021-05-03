@@ -512,7 +512,7 @@ do_execsql_test exclusive-6.5 {
 } {exclusive}
 
 # 2019-12-26 ticket fb3b3024ea238d5c
-if {[permutation]!="journaltest"} {
+if {[wal_is_capable] && [permutation]!="journaltest"} {
   # The custom VFS used by the "journaltest" permutation cannot open the
   # shared-memory file. So, while it is able to switch the db file to
   # journal_mode=WAL when locking_mode=EXCLUSIVE, it can no longer access

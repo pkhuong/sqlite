@@ -20,6 +20,8 @@ set testdir [file dirname $argv0]
 source $testdir/tester.tcl
 set testprefix wal9
 
+ifcapable !wal {finish_test ; return }
+
 sqlite3 db2 test.db
 
 do_execsql_test 1.0 {

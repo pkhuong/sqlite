@@ -17,6 +17,8 @@ source $testdir/tester.tcl
 source $testdir/lock_common.tcl
 set testprefix rowallock
 
+ifcapable !wal { finish_test; return }
+
 set mmap_res 1000000
 ifcapable !mmap {
   set mmap_res 0

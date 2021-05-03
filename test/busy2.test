@@ -18,6 +18,7 @@ source $testdir/lock_common.tcl
 set testprefix busy2
 
 do_multiclient_test tn {
+  ifcapable !wal { finish_test; return }
   do_test 1.$tn.0 {
     sql2 {
       CREATE TABLE t1(a, b);
@@ -53,6 +54,7 @@ do_multiclient_test tn {
 #-------------------------------------------------------------------------
 
 do_multiclient_test tn {
+  ifcapable !wal { finish_test; return }
   # Make the db a WAL mode db. And add a table and a row to it. Then open
   # a second connection within process 1. Process 1 now has connections
   # [db] and [db1.2], process 2 has connection [db2] only.

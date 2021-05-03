@@ -70,15 +70,18 @@ do_test 1.1.1 {
   files
 } {}
 
-do_test 1.2.0 {
-  execsql {
-    COMMIT;
-    PRAGMA journal_mode = wal;
-    INSERT INTO t1 VALUES(3, 4);
-  }
-  copydb
-  files
-} {test3.database test3.database-shm test3.database-wal}
+if [wal_is_capable] {
+  do_test 1.2.0 {
+    execsql {
+      COMMIT;
+      PRAGMA journal_mode = wal;
+      INSERT INTO t1 VALUES(3, 4);
+    }
+    copydb
+    files
+  } {test3.database test3.database-shm test3.database-wal}
+}
+
 do_test 1.2.1 {
   sqlite3_delete_database test3.database
   files
@@ -110,19 +113,20 @@ do_test 1.3.1 {
   files
 } {}
 
-
-do_test 1.4.0 {
-  execsql {
-    COMMIT;
-    PRAGMA journal_mode = wal;
-    UPDATE x1 SET a=randomblob(102)
-  }
-  copydb
-  files
-} [list {*}{
-  test3.database test3.database-shm test3.database-wal test3.database001 
-  test3.database002 test3.database003
-}]
+if [wal_is_capable] {
+  do_test 1.4.0 {
+    execsql {
+      COMMIT;
+      PRAGMA journal_mode = wal;
+      UPDATE x1 SET a=randomblob(102)
+    }
+    copydb
+    files
+  } [list {*}{
+    test3.database test3.database-shm test3.database-wal test3.database001 
+    test3.database002 test3.database003
+  }]
+}
 do_test 1.4.1 {
   sqlite3_delete_database test3.database
   files

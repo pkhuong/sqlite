@@ -15,6 +15,7 @@ source $testdir/tester.tcl
 source $testdir/wal_common.tcl
 set testprefix e_walhook
 
+ifcapable !wal { finish_test ; return }
 
 # EVIDENCE-OF: R-00752-43975 The sqlite3_wal_hook() function is used to
 # register a callback that is invoked each time data is committed to a

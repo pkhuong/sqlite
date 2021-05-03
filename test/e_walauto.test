@@ -24,6 +24,11 @@ if {$tcl_platform(os) == "OpenBSD"} {
   return
 }
 
+if {![wal_is_capable]} {
+  finish_test
+  return
+}
+
 # This module uses hard-coded offsets which do not work if the reserved_bytes
 # value is nonzero.
 if {[nonzero_reserved_bytes]} {finish_test; return;}

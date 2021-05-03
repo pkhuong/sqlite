@@ -107,12 +107,19 @@ do_test nolock-2.1 {
   sqlite3 db2 test.db -vfs tvfs
   db2 eval {SELECT * FROM t1, t2}
 } {hello world 12345 67890}
-do_test nolock-2.2 {
-  list xLock $::tvfs_calls(xLock) xUnlock $::tvfs_calls(xUnlock) \
-       xCheckReservedLock $::tvfs_calls(xCheckReservedLock) \
-       xAccess $::tvfs_calls(xAccess)
-} {xLock 2 xUnlock 2 xCheckReservedLock 0 xAccess 4}
-
+if [wal_is_capable] {
+  do_test nolock-2.2 {
+    list xLock $::tvfs_calls(xLock) xUnlock $::tvfs_calls(xUnlock) \
+         xCheckReservedLock $::tvfs_calls(xCheckReservedLock) \
+         xAccess $::tvfs_calls(xAccess)
+  } {xLock 2 xUnlock 2 xCheckReservedLock 0 xAccess 4}
+} else {
+  do_test nolock-2.2 {
+    list xLock $::tvfs_calls(xLock) xUnlock $::tvfs_calls(xUnlock) \
+         xCheckReservedLock $::tvfs_calls(xCheckReservedLock) \
+         xAccess $::tvfs_calls(xAccess)
+  } {xLock 2 xUnlock 2 xCheckReservedLock 0 xAccess 2}
+}
 
 do_test nolock-2.11 {
   db2 close
@@ -120,12 +127,19 @@ do_test nolock-2.11 {
   sqlite3 db2 file:test.db?immutable=0 -vfs tvfs -uri 1
   db2 eval {SELECT * FROM t1, t2}
 } {hello world 12345 67890}
-do_test nolock-2.12 {
-  list xLock $::tvfs_calls(xLock) xUnlock $::tvfs_calls(xUnlock) \
-       xCheckReservedLock $::tvfs_calls(xCheckReservedLock) \
-       xAccess $::tvfs_calls(xAccess)
-} {xLock 2 xUnlock 2 xCheckReservedLock 0 xAccess 4}
-
+if [wal_is_capable] {
+  do_test nolock-2.12 {
+    list xLock $::tvfs_calls(xLock) xUnlock $::tvfs_calls(xUnlock) \
+         xCheckReservedLock $::tvfs_calls(xCheckReservedLock) \
+         xAccess $::tvfs_calls(xAccess)
+  } {xLock 2 xUnlock 2 xCheckReservedLock 0 xAccess 4}
+} else {
+  do_test nolock-2.12 {
+    list xLock $::tvfs_calls(xLock) xUnlock $::tvfs_calls(xUnlock) \
+         xCheckReservedLock $::tvfs_calls(xCheckReservedLock) \
+         xAccess $::tvfs_calls(xAccess)
+  } {xLock 2 xUnlock 2 xCheckReservedLock 0 xAccess 2}
+}
 
 do_test nolock-2.21 {
   db2 close
@@ -183,7 +197,7 @@ db2 close
 db close
 tvfs delete
 
-if {[permutation]!="inmemory_journal"} {
+if {[permutation]!="inmemory_journal" && [wal_is_capable]} {
   # 2016-03-11:  Make sure all works when transitioning to WAL mode
   # under nolock.
   #

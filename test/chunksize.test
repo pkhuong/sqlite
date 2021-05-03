@@ -23,6 +23,9 @@ foreach {tn jrnlmode} {
   1 delete
   2 wal
 } {
+
+  ifcapable !wal { if {$jrnlmode == "wal"} continue }
+
   reset_db
   file_control_chunksize_test db main 32768
   do_execsql_test $tn.0 " PRAGMA journal_mode = $jrnlmode " $jrnlmode

@@ -76,6 +76,7 @@ do_execsql_sync_test 1.4.3 { INSERT INTO t1 VALUES(9, 10) } 4
 #-----------------------------------------------------------------------
 # Tests for wal mode.
 #
+ifcapable wal {
 do_execsql_test      1.5 { PRAGMA journal_mode = wal } {wal}
 
 # sync=full, journal_mode=wal. One sync on the directory, two on the 
@@ -97,6 +98,7 @@ do_execsql_sync_test 1.9   { PRAGMA wal_checkpoint }  {2 0 3 3}
 do_execsql_test      1.10.1 { PRAGMA main.synchronous = OFF }
 do_execsql_test      1.10.2 { PRAGMA main.synchronous }          0
 do_execsql_sync_test 1.10.3 { INSERT INTO t1 VALUES(17, 18) }    0
+}
 
 #-----------------------------------------------------------------------
 # Tests for the compile time settings SQLITE_DEFAULT_SYNCHRONOUS and
@@ -106,7 +108,7 @@ do_execsql_sync_test 1.10.3 { INSERT INTO t1 VALUES(17, 18) }    0
 #
 #   https://sqlite.org/compile.html#recommended_compile_time_options
 #
-if {$SQLITE_DEFAULT_SYNCHRONOUS==2 && $SQLITE_DEFAULT_WAL_SYNCHRONOUS==1} {
+if {[wal_is_capable] && $SQLITE_DEFAULT_SYNCHRONOUS==2 && $SQLITE_DEFAULT_WAL_SYNCHRONOUS==1} {
 
   db close
   sqlite3 db test.db

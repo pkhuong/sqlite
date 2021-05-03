@@ -132,7 +132,7 @@ foreach {tn f} {1 test.db2 2 test.db3} {
       INSERT INTO t1 VALUES(2);
     } db2
     file exists test.db-wal
-  } 1
+  } [expr [wal_is_capable]]
   do_test 2.$tn.5 {
     list [file exists test2.db-wal] [file exists test3.db-wal]
   } {0 0}
@@ -171,8 +171,9 @@ do_test 4.1 {
     CREATE TABLE t1(x, y);
     INSERT INTO t1 VALUES('hello', 'world');
   }
-} {wal}
+} [expr [wal_is_capable] ? {"wal"} : {"delete"}]
 
+ifcapable wal {
 do_test 4.2.1 {
   db close
   sqlite3 db y/test.db
@@ -191,6 +192,7 @@ do_test 4.3.2 {
   list [file exists x/test.db-wal] [file exists y/test.db-wal] \
        [file exists z/test.db-wal]
 } {1 0 0}
+}
 
 do_test 4.4.0 {
   forcedelete w
@@ -203,8 +205,11 @@ do_test 4.4.1 {
   sqlite3 db w/test.db
   db eval { SELECT * FROM t1 }
 } {hello world}
+
+ifcapable wal {
 do_test 4.4.2 {
   list [file exists x/test.db-wal] [file exists w/test.db-wal]
 } {1 0}
+}
 
 finish_test

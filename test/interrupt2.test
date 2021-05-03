@@ -18,7 +18,7 @@ source $testdir/tester.tcl
 source $testdir/wal_common.tcl
 set testprefix interrupt2
 
-if {[permutation]=="journaltest" || [permutation]=="inmemory_journal"} {
+if {![wal_is_capable] || [permutation]=="journaltest" || [permutation]=="inmemory_journal"} {
   finish_test
   return
 }
