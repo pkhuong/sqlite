@@ -3951,7 +3951,10 @@ static void unixModeBit(unixFile *pFile, unsigned char mask, int *pArg){
 
 /* Forward declaration */
 static int unixGetTempname(int nBuf, char *zBuf);
+
+#ifndef SQLITE_OMIT_WAL
 static int unixFcntlExternalReader(unixFile*, int*);
+#endif
 
 /*
 ** Information and control of an open file handle.
@@ -4069,9 +4072,11 @@ static int unixFileControl(sqlite3_file *id, int op, void *pArg){
     }
 #endif /* SQLITE_ENABLE_LOCKING_STYLE && defined(__APPLE__) */
 
+#ifndef SQLITE_OMIT_WAL      
     case SQLITE_FCNTL_EXTERNAL_READER: {
       return unixFcntlExternalReader((unixFile*)id, (int*)pArg);
     }
+#endif
   }
   return SQLITE_NOTFOUND;
 }
