@@ -16,7 +16,11 @@
 
 set testdir [file dirname $argv0]
 source $testdir/tester.tcl
-if {[test_syscall defaultvfs] != "unix"} { finish_test ; return }
+try {
+  if {[test_syscall defaultvfs] != "unix"} { finish_test ; return }
+} on error {} {
+  finish_test; return
+}
 set ::testprefix oserror
 
 db close
