@@ -751,7 +751,7 @@ do_faultsim_test pagerfault-15 -prep {
   faultsim_integrity_check
 }
 
-
+ifcapable wal {
 do_test pagerfault-16-pre1 {
   faultsim_delete_and_reopen
   execsql { CREATE TABLE t1(x, y UNIQUE) }
@@ -776,11 +776,12 @@ do_faultsim_test pagerfault-16 -prep {
   faultsim_test_result {0 {exclusive wal delete wal persist}}
   faultsim_integrity_check
 }
-
+}
 
 #-------------------------------------------------------------------------
 # Test fault injection while changing into and out of WAL mode.
 #
+ifcapable wal {
 do_test pagerfault-17-pre1 {
   faultsim_delete_and_reopen
   execsql {
@@ -858,6 +859,7 @@ do_faultsim_test pagerfault-17e -prep {
 } -test {
   faultsim_test_result {0 delete}
   faultsim_integrity_check
+}
 }
 
 #-------------------------------------------------------------------------
@@ -1024,7 +1026,7 @@ do_faultsim_test pagerfault-21 -prep {
   faultsim_test_result {0 {}}
   faultsim_integrity_check
 }
-ifcapable crashtest {
+ifcapable {crashtest && wal} {
   faultsim_delete_and_reopen
   execsql {
     PRAGMA page_size = 1024;
