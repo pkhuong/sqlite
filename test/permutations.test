@@ -450,6 +450,7 @@ lappend ::testsuitelist xxx
 #
 #   coverage-wal
 #
+if [wal_is_capable] {
 test_suite "coverage-wal" -description {
   Coverage tests for file wal.c.
 } -files {
@@ -466,6 +467,7 @@ test_suite "coverage-wal" -description {
   snapshot2.test snapshot3.test snapshot4.test
   snapshot_fault.test snapshot.test snapshot_up.test
 } 
+}
 
 test_suite "coverage-pager" -description {
   Coverage tests for file pager.c.
@@ -1006,6 +1008,7 @@ if {[info commands register_demovfs] != ""} {
   }
 }
 
+if [wal_is_capable] {
 test_suite "wal" -description {
   Run tests with journal_mode=WAL
 } -initialize {
@@ -1021,6 +1024,7 @@ test_suite "wal" -description {
   fts3ai.test  fts3aj.test  fts3ak.test  fts3al.test
   fts3am.test  fts3an.test  fts3ao.test  fts3b.test
   fts3c.test   fts3d.test   fts3e.test   fts3query.test 
+}
 }
 
 test_suite "rtree" -description {
