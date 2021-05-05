@@ -15,10 +15,10 @@ source $testdir/tester.tcl
 source $testdir/lock_common.tcl
 source $testdir/malloc_common.tcl
 
-if {[llength [info commands test_syscall]]==0} {
+if {[llength [info commands test_syscall]]==0 || [llength [test_syscall list]]==0} {
   finish_test
   return
-} 
+}
 
 set testprefix sysfault
 
