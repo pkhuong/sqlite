@@ -996,6 +996,7 @@ do_faultsim_test pagerfault-21 -prep {
 # Test fault-injection and rollback when the nReserve header value 
 # is non-zero.
 #
+ifcapable wal {
 do_test pagerfault-21-pre1 {
   faultsim_delete_and_reopen
   execsql {
@@ -1062,7 +1063,7 @@ ifcapable {crashtest && wal} {
     db close
   }
 }
-
+}
 
 #-------------------------------------------------------------------------
 # When a 3.7.0 client opens a write-transaction on a database file that
@@ -1255,6 +1256,7 @@ do_faultsim_test pagerfault-27 -faults ioerr-persistent -prep {
 
 #-------------------------------------------------------------------------
 #
+ifcapable wal {
 do_test pagerfault-28-pre {
   faultsim_delete_and_reopen
   db func a_string a_string
@@ -1325,6 +1327,7 @@ do_faultsim_test pagerfault-28b -faults oom* -prep {
 }
 
 db2 close
+}
 
 #-------------------------------------------------------------------------
 # Try this:
