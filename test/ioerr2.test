@@ -138,7 +138,7 @@ do_test ioerr2-5 {
   list $rc $msg
 } {1 {disk I/O error}} ;# used to be "{1 {abort due to ROLLBACK}}"
 
-if {$::tcl_platform(platform) == "unix"} {
+if {[test_syscall defaultvfs] == "unix"} {
   # Cause the call to xAccess used by [pragma temp_store_directory] to
   # determine if the specified directory is writable to fail. This causes
   # SQLite to report "not a writable directory", which is probably the

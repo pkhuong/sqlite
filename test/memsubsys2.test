@@ -91,6 +91,11 @@ do_test memsubsys2-2.2.2 {
 # tracking.
 #
 db close
+
+if {[test_syscall defaultvfs] != "unix"} {
+  finish_test; return
+}
+
 sqlite3_shutdown
 sqlite3_config_memstatus 0
 sqlite3_initialize
@@ -124,7 +129,7 @@ do_test memsubsys2-3.8 {
 do_test memsubsys2-3.9 {
   sqlite3_free 0
 } {}
-  
+
 
 # Test 4: Verify that turning on memstatus reenables the statistics
 # tracking.
