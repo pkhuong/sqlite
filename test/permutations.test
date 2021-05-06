@@ -759,6 +759,14 @@ test_suite "autovacuum_ioerr" -description {
   pragma auto_vacuum = 1
 } -files ioerr.test
 
+test_suite "inmemory_journal_quick" -description {
+  Run tests with an in-memory journal file.
+} -presql {
+  pragma journal_mode = 'memory'
+} -files {
+  corrupt4.test corruptN.test ioerr.test pagerfault.test memsubsys2.test
+}
+
 # Run tests with an in-memory journal.
 #
 test_suite "inmemory_journal" -description {
