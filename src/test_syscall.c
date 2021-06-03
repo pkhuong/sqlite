@@ -732,15 +732,18 @@ static int SQLITE_TCLAPI test_syscall(
     Tcl_WrongNumArgs(interp, 1, objv, "SUB-COMMAND ...");
     return TCL_ERROR;
   }
-  if( pVfs->iVersion<3 || pVfs->xSetSystemCall==0 ){
+
+  rc = Tcl_GetIndexFromObjStruct(interp, 
+      objv[1], aCmd, sizeof(aCmd[0]), "sub-command", 0, &iCmd
+  );
+  if ( rc!=TCL_OK) return rc;
+
+  if ( aCmd[iCmd].xCmd!=test_syscall_defaultvfs &&
+       ( pVfs->iVersion<3 || pVfs->xSetSystemCall==0 )){
     Tcl_AppendResult(interp, "VFS does not support xSetSystemCall", 0);
-    rc = TCL_ERROR;
-  }else{
-    rc = Tcl_GetIndexFromObjStruct(interp, 
-        objv[1], aCmd, sizeof(aCmd[0]), "sub-command", 0, &iCmd
-    );
+    return TCL_ERROR;
   }
-  if( rc!=TCL_OK ) return rc;
+
   return aCmd[iCmd].xCmd(clientData, interp, objc, objv);
 }
 
