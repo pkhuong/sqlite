@@ -79,7 +79,13 @@ foreach {name f} $files {
   } else {
     set mode wal
   }
-  ifcapable !wal { set mode delete }
+  ifcapable !wal {
+    if {$name == "main" && [permutation] == "inmemory_journal"} {
+       set mode memory
+    } else {
+       set mode delete
+    }
+  }
   lappend L $mode
   append S "
     PRAGMA $name.journal_mode = WAL;
