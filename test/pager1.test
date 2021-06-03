@@ -2564,6 +2564,9 @@ do_test pager1-31.1 {
 catch {db close}
 forcedelete test.db
 
+# Change this if you want to implement size hinting in
+# your custom VFS.
+if {[test_syscall defaultvfs] == "unix"} {
 do_test pager1-32.1 {
   sqlite3 db test.db
   execsql {
@@ -2594,6 +2597,7 @@ do_test pager1-32.1 {
 
 # Cleanup 20MB file left by the previous test.
 forcedelete test.db
+}
 
 #-------------------------------------------------------------------------
 # Test that if a transaction is committed in journal_mode=DELETE mode,
