@@ -27,10 +27,15 @@ do_test filectrl-1.3 {
   sqlite3 db :memory:
   file_control_test db
 } {}
+
+# We don't intend to implement that in our VFS.
+if {[test_syscall defaultvfs] == "unix"} {
 do_test filectrl-1.4 {
   sqlite3 db test.db
   file_control_lasterrno_test db
 } {}
+}
+
 do_test filectrl-1.5 {
   db close
   sqlite3 db test_control_lockproxy.db
