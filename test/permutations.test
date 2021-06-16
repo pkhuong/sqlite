@@ -997,7 +997,7 @@ test_suite "journaltest" -description {
 } -files [test_set $::allquicktests -exclude {
   wal* incrvacuum.test ioerr.test corrupt4.test io.test crash8.test 
   async4.test bigfile.test backcompat.test e_wal* fstat.test mmap2.test
-  pager1.test syscall.test tkt3457.test *malloc* mmap* multiplex* nolock*
+  pager1.test syscall.test tkt3457.test *malloc* mmap* nolock*
   pager2.test *fault* rowal* snapshot* superlock* symlink.test
   delete_db.test shmlock.test chunksize.test
   busy2.test external_reader.test
